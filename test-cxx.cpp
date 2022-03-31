@@ -3,8 +3,6 @@
 #include "slowstacktrace.h"
 #include <cstdio>
 
-extern "C" void get_thread_stacktrace(char *out_buf, std::size_t out_buf_size);
-
 void logStackTrace() {
   char buf[1024*8]{};
   get_thread_stacktrace(buf, sizeof(buf));
