@@ -306,6 +306,10 @@ class StackTraceTextPrinter {
         output_(output),
         dedup_token_(dedup_token),
         symbolize_(RenderNeedsSymbolization(stack_trace_fmt)) {}
+  
+  ~StackTraceTextPrinter() {
+    delete symbolizer_;
+  }
 
   bool ProcessAddressFrames(uptr pc) {
     // SymbolizedStack *frames = Symbolizer::GetOrInit()->SymbolizePC(pc);
