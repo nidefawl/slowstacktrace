@@ -21,6 +21,7 @@ class SymbolizerTool {
   SymbolizerTool *next;
 
   SymbolizerTool() : next(nullptr) { }
+  virtual ~SymbolizerTool() = default;
 
   // Can't declare pure virtual functions in sanitizer runtimes:
   // __cxa_pure_virtual might be unavailable.
@@ -41,9 +42,6 @@ class SymbolizerTool {
   virtual bool SymbolizeFrame(uptr addr, FrameInfo *info) {
     return false;
   }
-
- protected:
-  ~SymbolizerTool() {}
 };
 
 // SymbolizerProcess encapsulates communication between the tool and
@@ -55,7 +53,7 @@ class SymbolizerProcess {
   const char *SendCommand(const char *command);
 
  protected:
-  ~SymbolizerProcess() {}
+  ~SymbolizerProcess();
 
   /// The maximum number of arguments required to invoke a tool process.
   static const unsigned kArgVMax = 16;
@@ -103,6 +101,7 @@ class LLVMSymbolizerProcess;
 class LLVMSymbolizer final : public SymbolizerTool {
  public:
   explicit LLVMSymbolizer(const char *path);
+  ~LLVMSymbolizer() override;
 
   bool SymbolizePC(uptr addr, SymbolizedStack *stack) override;
   bool SymbolizeData(uptr addr, DataInfo *info) override;

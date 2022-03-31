@@ -125,6 +125,10 @@ class LLVMSymbolizerProcess final : public SymbolizerProcess {
 LLVMSymbolizer::LLVMSymbolizer(const char *path)
     : symbolizer_process_(new LLVMSymbolizerProcess(path)) {}
 
+LLVMSymbolizer::~LLVMSymbolizer() {
+  delete symbolizer_process_;
+}
+
 const char *ExtractToken(const char *str, const char *delims, char **result) {
   uptr prefix_len = std::strcspn(str, delims);
   *result = (char*)std::malloc(prefix_len + 1);
@@ -333,6 +337,13 @@ bool SymbolizerProcess::Restart() {
   return StartSymbolizerSubprocess();
 }
 
+SymbolizerProcess::~SymbolizerProcess() {
+  if (input_fd_ != kInvalidFd)
+    CloseFile(input_fd_);
+  if (output_fd_ != kInvalidFd)
+    CloseFile(output_fd_);
+}
+
 bool SymbolizerProcess::ReadFromSymbolizer(char *buffer, uptr max_length) {
   if (max_length == 0)
     return true;
@@ -471,6 +482,11 @@ Symbolizer::Symbolizer(std::vector<SymbolizerTool*> tools)
     : modules_(), tools_(tools) {
   modules_.init();
   RAW_CHECK(modules_.size() > 0);
+}
+Symbolizer::~Symbolizer() {
+  for (auto* tool : tools_) {
+      delete tool;
+  }
 }
 
 bool Symbolizer::SymbolizeData(uptr addr, DataInfo *info) {

@@ -271,6 +271,7 @@ class Symbolizer final {
   std::vector<SymbolizerTool*> tools_;
 
   explicit Symbolizer(std::vector<SymbolizerTool*> tools);
+  ~Symbolizer();
 };
 
 #ifdef SANITIZER_WINDOWS
