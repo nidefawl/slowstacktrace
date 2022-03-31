@@ -483,8 +483,7 @@ static void ChooseSymbolizerTools(std::vector<SymbolizerTool*> *list) {
   // Add llvm-symbolizer.
   InternalScopedString binary_path;
   if (FindPathToBinary("llvm-symbolizer.exe", binary_path)) {
-    VReport(2, "Using llvm-symbolizer at %spath: %s\n",
-            binary_path.data());
+    VReport(2, "Using llvm-symbolizer at %s\n",binary_path.data());
     list->push_back(new LLVMSymbolizer(binary_path.data()));
   } else {
     VReport(2, "External symbolizer is not present.\n");
