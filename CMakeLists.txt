@@ -42,5 +42,3 @@ install(TARGETS ${LIB_NAME}
 install(
   FILES "slowstacktrace.h"
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-      
-# install(FILES slowstacktrace.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
