@@ -446,8 +446,7 @@ void AddressInfo::FillModuleInfo(const LoadedModule &mod) {
 SymbolizedStack::SymbolizedStack() : next(nullptr), info() {}
 
 SymbolizedStack *SymbolizedStack::New(uptr addr) {
-  void *mem = std::malloc(sizeof(SymbolizedStack));
-  SymbolizedStack *res = new(mem) SymbolizedStack();
+  SymbolizedStack *res = new SymbolizedStack();
   res->info.address = addr;
   return res;
 }
