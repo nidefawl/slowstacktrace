@@ -314,7 +314,7 @@ int snprintf(char *buffer, uptr length, const char *format, ...) {
 void InternalScopedString::set(const char *str) {
   auto len = std::strlen(str);
   buffer_.resize(len + 1);
-  buffer_.assign(str, str + len);
+  buffer_.assign(str, str + len + 1);
   buffer_[length()] = 0;
   CHECK_EQ(buffer_[length()], '\0');
 }
