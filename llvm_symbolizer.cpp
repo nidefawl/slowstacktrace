@@ -46,7 +46,6 @@ char *FindPathToBinary(const char *name) {
       std::memcpy(&buffer[prefix_len + 1], name, name_len);
       buffer[prefix_len + 1 + name_len] = '\0';
       if (FileExists(buffer.data())) {
-        FileExists(buffer.data());
         return strdup(buffer.data());
       }
     }
