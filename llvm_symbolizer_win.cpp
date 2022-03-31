@@ -481,19 +481,13 @@ bool SymbolizerProcess::StartSymbolizerSubprocess() {
 static void ChooseSymbolizerTools(std::vector<SymbolizerTool*> *list) {
 
   // Add llvm-symbolizer.
-  const auto user_path = "";
-  const char *path = FindPathToBinary("llvm-symbolizer.exe");
-  if (path) {
+  InternalScopedString binary_path;
+  if (FindPathToBinary("llvm-symbolizer.exe", binary_path)) {
     VReport(2, "Using llvm-symbolizer at %spath: %s\n",
-            user_path ? "user-specified " : "", path);
-    list->push_back(new LLVMSymbolizer(path));
-  } else {
-    if (user_path && user_path[0] == '\0') {
-      VReport(2, "External symbolizer is explicitly disabled.\n");
-    } else {
-      VReport(2, "External symbolizer is not present.\n");
-    }
+            binary_path.data());
+    list->push_back(new LLVMSymbolizer(binary_path.data()));
   }
+  VReport(2, "External symbolizer is not present.\n");
 
   // Add the dbghelp based symbolizer.
   list->push_back(new WinSymbolizerTool());

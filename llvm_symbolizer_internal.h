@@ -79,7 +79,7 @@ class SymbolizerProcess {
   const char *SendCommandImpl(const char *command);
   bool WriteToSymbolizer(const char *buffer, uptr length);
 
-  const char *path_;
+  char* const path_;
   fd_t input_fd_;
   fd_t output_fd_;
 
@@ -144,7 +144,7 @@ bool ReadFromFile(fd_t fd, void *buff, uptr buff_size, uptr *bytes_read, error_t
 bool WriteToFile(fd_t fd, const void *buff, uptr buff_size, uptr *bytes_written, error_t *error_p);
 bool FileExists(const char *filename);
 bool DirExists(const char *path);
-char *FindPathToBinary(const char *name);
+bool FindPathToBinary(const char *name, InternalScopedString& binary_path);
 
 }  // namespace llvm_stacktrace
 

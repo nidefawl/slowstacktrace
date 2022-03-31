@@ -311,6 +311,13 @@ int snprintf(char *buffer, uptr length, const char *format, ...) {
   va_end(args);
   return needed_length;
 }
+void InternalScopedString::set(const char *str) {
+  auto len = std::strlen(str);
+  buffer_.resize(len + 1);
+  buffer_.assign(str, str + len);
+  buffer_[length()] = 0;
+  CHECK_EQ(buffer_[length()], '\0');
+}
 
 void InternalScopedString::append(const char *format, ...) {
   uptr prev_len = length();

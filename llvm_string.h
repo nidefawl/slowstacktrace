@@ -32,6 +32,7 @@ class InternalScopedString {
     buffer_[0] = '\0';
   }
   void append(const char *format, ...) FORMAT(2, 3);
+  void set(const char *str);
   const char *data() const { return buffer_.data(); }
   char *data() { return buffer_.data(); }
 

@@ -10,6 +10,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 
 namespace llvm_stacktrace {
 
@@ -26,14 +27,15 @@ char *internal_strchrnul(const char *s, int c) {
   return res;
 }
 
-char *FindPathToBinary(const char *name) {
+bool FindPathToBinary(const char *name, InternalScopedString& binary_path) {
   if (FileExists(name)) {
-    return strdup(name);
+    binary_path.set(name);
+    return true;
   }
 
   const char *path = std::getenv("PATH");
   if (!path)
-    return nullptr;
+    return false;
   uptr name_len = std::strlen(name);
   std::vector<char> buffer(kMaxPathLength);
   const char *beg = path;
@@ -46,13 +48,14 @@ char *FindPathToBinary(const char *name) {
       std::memcpy(&buffer[prefix_len + 1], name, name_len);
       buffer[prefix_len + 1 + name_len] = '\0';
       if (FileExists(buffer.data())) {
-        return strdup(buffer.data());
+        binary_path.set(buffer.data());
+        return true;
       }
     }
     if (*end == '\0') break;
     beg = end + 1;
   }
-  return nullptr;
+  return false;
 }
 
 // For now we assume the following protocol:
@@ -291,7 +294,7 @@ const char *LLVMSymbolizer::FormatAndSendCommand(const char *command_prefix,
 }
 
 SymbolizerProcess::SymbolizerProcess(const char *path, bool use_posix_spawn)
-    : path_(path),
+    : path_(strdup(path)),
       input_fd_(kInvalidFd),
       output_fd_(kInvalidFd),
       times_restarted_(0),
@@ -337,6 +340,7 @@ bool SymbolizerProcess::Restart() {
 }
 
 SymbolizerProcess::~SymbolizerProcess() {
+  std::free(path_);
   if (input_fd_ != kInvalidFd)
     CloseFile(input_fd_);
   if (output_fd_ != kInvalidFd)

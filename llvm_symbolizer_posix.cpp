@@ -494,9 +494,10 @@ bool SymbolizerProcess::StartSymbolizerSubprocess() {
 
 
 static SymbolizerTool *ChooseExternalSymbolizer() {
-  if (const char *found_path = FindPathToBinary("llvm-symbolizer")) {
-    VReport(2, "Using llvm-symbolizer found at: %s\n", found_path);
-    return new LLVMSymbolizer(found_path);
+  InternalScopedString binary_path;
+  if (FindPathToBinary("llvm-symbolizer", binary_path)) {
+    VReport(2, "Using llvm-symbolizer found at: %s\n", binary_path.data());
+    return new LLVMSymbolizer(binary_path.data());
   }
   return nullptr;
 }
