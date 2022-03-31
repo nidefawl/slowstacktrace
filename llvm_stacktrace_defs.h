@@ -439,6 +439,8 @@ typedef int pid_t;
 # define UNLIKELY(x)   __builtin_expect(!!(x), 0)
 #endif  // _MSC_VER
 
+void failed_check();
+
 // Check macro
 #define RAW_CHECK_MSG(expr, msg, ...)                                          \
   do {                                                                         \
@@ -446,7 +448,7 @@ typedef int pid_t;
       const char *msgs[] = {msg, __VA_ARGS__};                                 \
       for (const char *m : msgs)                                               \
         llvm_stacktrace::RawWrite(m);                                          \
-      exit(1);                                                                 \
+      failed_check();                                                          \
     }                                                                          \
   } while (0)
 
@@ -462,7 +464,7 @@ typedef int pid_t;
           "llvm_stacktrace CHECK failed: %s:%d \"%s\" (0x%zx, 0x%zx)\n",       \
           StripModuleName(__FILE__), __LINE__, "(" #c1 ") " #op " (" #c2 ")",  \
           (uptr)v1, (uptr)v2);                                                 \
-      exit(1);                                                                 \
+      failed_check();                                                          \
     }                                                                          \
   } while (false)
 /**/

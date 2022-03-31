@@ -4,8 +4,15 @@
 #include "llvm_stacktrace.h"
 #include "llvm_string.h"
 #include "llvm_symbolizer.h"
+#include <assert.h>
+#include <cstdlib>
 
 namespace llvm_stacktrace {
+
+void failed_check() {
+  assert(0);
+  exit(1);
+}
 
 uptr StackTrace::GetNextInstructionPc(uptr pc) {
 #if defined(__aarch64__)

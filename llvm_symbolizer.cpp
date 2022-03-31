@@ -344,7 +344,7 @@ bool SymbolizerProcess::ReadFromSymbolizer(char *buffer, uptr max_length) {
     // We can't read 0 bytes, as we don't expect external symbolizer to close
     // its stdout.
     if (!success || just_read == 0) {
-      Report("WARNING: Can't read from symbolizer at fd %zu\n", uint64_t(input_fd_));
+      Report("WARNING: Can't read from symbolizer at fd %zu\n", uptr(input_fd_));
       return false;
     }
     read_len += just_read;
@@ -366,7 +366,7 @@ bool SymbolizerProcess::WriteToSymbolizer(const char *buffer, uptr length) {
   uptr write_len = 0;
   bool success = WriteToFile(output_fd_, buffer, length, &write_len, nullptr);
   if (!success || write_len != length) {
-    Report("WARNING: Can't write to symbolizer at fd %zu\n", uint64_t(input_fd_));
+    Report("WARNING: Can't write to symbolizer at fd %zu\n", uptr(input_fd_));
     return false;
   }
   return true;

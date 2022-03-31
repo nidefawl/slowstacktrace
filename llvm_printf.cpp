@@ -4,9 +4,10 @@
 #include "llvm_stacktrace_defs.h"
 #include "llvm_string.h"
 
-#include <cstdio>
 #include <stdio.h>
 #include <stdarg.h>
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
 
 #if SANITIZER_WINDOWS && defined(_MSC_VER) && _MSC_VER < 1800 &&               \

@@ -38,9 +38,6 @@
 
 namespace llvm_stacktrace {
 
-static const char kPathSeparator = SANITIZER_WINDOWS ? ';' : ':';
-
-
 void CloseFile(fd_t fd) {
   close(fd);
 }
