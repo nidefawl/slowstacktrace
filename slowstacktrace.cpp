@@ -33,21 +33,21 @@
 
 extern "C" {
 
-void get_thread_stacktrace(char *out_buf, size_t out_buf_size) {
+void get_thread_stacktrace(char *out_buf, size_t out_buf_size, const char* format) {
   using namespace llvm_stacktrace;
   const auto pc = StackTrace::GetCurrentPc();
   const auto frame = GET_CURRENT_FRAME();
   BufferedStackTrace stack;
   stack.Unwind(pc, frame, kStackTraceMax);
   if (out_buf && out_buf_size) {
-    stack.PrintTo(out_buf, out_buf_size, "    #%n %p %F %L");
+    stack.PrintTo(out_buf, out_buf_size, format);
   } else {
-    stack.Print();
+    stack.Print(format);
   }
 }
 
-void print_thread_stacktrace() {
-  get_thread_stacktrace(nullptr, 0);
+void print_thread_stacktrace(const char* format) {
+  get_thread_stacktrace(nullptr, 0, format);
 }
 
 }
