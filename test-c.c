@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 void logStackTrace() {
-  char buf[4096] = { };
+  char buf[4096] = { 0 };
   get_thread_stacktrace(buf, sizeof(buf));
   puts(buf);
 }
