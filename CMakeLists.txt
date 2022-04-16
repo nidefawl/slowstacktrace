@@ -20,9 +20,15 @@ add_library(${LIB_NAME})
 target_sources(${LIB_NAME} PRIVATE ${SRC_FILES_LLVM_UNWIND_SYMBOLIZE} ${SRC_FILES_LIB})
 target_sources(${LIB_NAME} INTERFACE slowstacktrace.h)
 target_include_directories(${LIB_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+
 if (NOT MSVC) 
-target_compile_options(${LIB_NAME} PRIVATE -Wall -Wextra -pedantic -Wno-unused-parameter)
-target_compile_options(${LIB_NAME} PRIVATE -fomit-frame-pointer -fno-stack-protector -fno-rtti -fno-exceptions)
+  target_compile_options(${LIB_NAME} PRIVATE -Wall -Wextra -pedantic -Wno-unused-parameter)
+  target_compile_options(${LIB_NAME} PRIVATE -fomit-frame-pointer -fno-stack-protector -fno-rtti -fno-exceptions)
+endif()
+
+if (MINGW AND (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX))
+  # MinGW GCC does not know about 'z' conversion and this library uses it's own VSNPrintf implementation
+  target_compile_options(${LIB_NAME} PRIVATE -Wno-format)
 endif()
 
 if(UNIX)

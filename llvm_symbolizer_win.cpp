@@ -285,7 +285,10 @@ void InitializeDbgHelpIfNeeded() {
 
   HMODULE dbghelp = LoadLibraryA("dbghelp.dll");
   CHECK(dbghelp && "failed to load dbghelp.dll");
-
+#if defined(__MINGW32__) && (defined(__GNUC__) && !defined(__clang__))
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-function-type"
+#endif
 #define DBGHELP_IMPORT(name)                                                  \
   do {                                                                        \
     name =                                                                    \
@@ -304,6 +307,9 @@ void InitializeDbgHelpIfNeeded() {
   DBGHELP_IMPORT(SymSetSearchPathW);
   // DBGHELP_IMPORT(UnDecorateSymbolName);
 #undef DBGHELP_IMPORT
+#if defined(__MINGW32__) && (defined(__GNUC__) && !defined(__clang__))
+#pragma GCC diagnostic pop
+#endif
 
   if (!TrySymInitialize()) {
     // OK, maybe the client app has called SymInitialize already.
