@@ -289,11 +289,11 @@ void InitializeDbgHelpIfNeeded() {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
-#define DBGHELP_IMPORT(name)                                                  \
-  do {                                                                        \
-    name =                                                                    \
-        reinterpret_cast<decltype(::name) *>(GetProcAddress(dbghelp, #name)); \
-    CHECK(name != nullptr);                                                   \
+#define DBGHELP_IMPORT(name)                     \
+  do {                                           \
+    name = reinterpret_cast<decltype(::name) *>( \
+        (void *)GetProcAddress(dbghelp, #name)); \
+    CHECK(name != nullptr);                      \
   } while (0)
   DBGHELP_IMPORT(StackWalk64);
   DBGHELP_IMPORT(SymCleanup);
